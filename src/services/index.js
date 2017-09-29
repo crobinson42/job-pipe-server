@@ -3,6 +3,7 @@ const users = require('./users/users.service.js');
 const applicants = require('./applicants/applicants.service.js');
 const organizations = require('./organizations/organizations.service.js');
 const search = require('./search/search.service.js');
+const registration = require('./registration/registration.service.js');
 module.exports = function () {
   const app = this; // eslint-disable-line no-unused-vars
   app.configure(forms);
@@ -10,4 +11,5 @@ module.exports = function () {
   app.configure(applicants);
   app.configure(organizations);
   app.configure(search);
+  app.configure(registration);
 };

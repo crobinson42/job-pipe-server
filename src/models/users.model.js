@@ -7,6 +7,7 @@ module.exports = function(app) {
   const { Schema } = mongooseClient
 
   const users = new mongooseClient.Schema({
+    admin: { type: Boolean, default: false },
     email: { type: String, unique: true },
     organization: { type: Schema.Types.ObjectId, ref: 'organizations' },
     password: { type: String },
