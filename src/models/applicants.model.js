@@ -11,6 +11,15 @@ module.exports = function(app) {
     firstName: { type: String, required: true },
     formValues: { type: Object, default: {} },
     lastName: { type: String, required: true },
+    // used by organization users only
+    notes: [{
+      text: { type: String, required: true },
+
+      createdAt: { type: Date, default: Date.now },
+      createdBy: { type: Schema.Types.ObjectId, ref: 'users' },
+      updatedAt: { type: Date, default: Date.now },
+      updatedBy: { type: Schema.Types.ObjectId, ref: 'users' },
+    }],
     phone: { type: String, required: true },
 
     form: { type: Schema.Types.ObjectId, ref: 'forms' },
