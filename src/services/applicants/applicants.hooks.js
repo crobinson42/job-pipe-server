@@ -1,14 +1,18 @@
-const { authenticate } = require('feathers-authentication').hooks;
+// const commonHooks = require('feathers-hooks-common')
+const { authed } = require('../../hooks')
 
 module.exports = {
   before: {
-    all: [ authenticate('jwt') ],
-    find: [],
+    all: [],
+    find: [authed],
     get: [],
     create: [],
-    update: [],
-    patch: [],
-    remove: []
+    update: [authed],
+    patch: [authed],
+    remove: [
+      // todo: disallow?
+      authed,
+    ],
   },
 
   after: {
@@ -18,7 +22,7 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: []
+    remove: [],
   },
 
   error: {
@@ -28,6 +32,6 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: []
-  }
-};
+    remove: [],
+  },
+}

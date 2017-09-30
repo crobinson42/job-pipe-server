@@ -8,9 +8,9 @@ module.exports = function(app) {
 
   const users = new mongooseClient.Schema({
     admin: { type: Boolean, default: false },
-    email: { type: String, unique: true },
-    organization: { type: Schema.Types.ObjectId, ref: 'organizations' },
-    password: { type: String },
+    email: { type: String, required: true, unique: true },
+    organization: { type: Schema.Types.ObjectId, ref: 'organizations', required: true },
+    password: { type: String, required: true },
 
     // auth
     googleId: { type: String },

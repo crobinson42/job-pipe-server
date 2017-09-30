@@ -1,18 +1,34 @@
-const { authenticate } = require('feathers-authentication').hooks;
+const commonHooks = require('feathers-hooks-common')
+const { authed, isAdmin, restrictToSameOrganization } = require('../../hooks')
 
 module.exports = {
   before: {
-    all: [ authenticate('jwt') ],
+    all: [],
     find: [],
     get: [],
     create: [
-      /* todo: policies
-        - only allow internal transport from another service
-      */
+      // only allow internal service (registration)
+      commonHooks.disallow('external')
     ],
-    update: [],
-    patch: [],
-    remove: []
+    update: [
+      // only allow admin, same organization, and remove sensitive fields
+      commonHooks.iff(commonHooks.isProvider('external'), [
+        authed,
+        isAdmin,
+        restrictToSameOrganization,
+        commonHooks.discard(['_id', 'users']),
+      ]),
+    ],
+    patch: [
+      // same as update
+      commonHooks.iff(commonHooks.isProvider('external'), [
+        authed,
+        isAdmin,
+        restrictToSameOrganization,
+        commonHooks.discard(['_id', 'users']),
+      ]),
+    ],
+    remove: [commonHooks.disallow()],
   },
 
   after: {
@@ -22,7 +38,7 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: []
+    remove: [],
   },
 
   error: {
@@ -32,6 +48,6 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: []
-  }
-};
+    remove: [],
+  },
+}

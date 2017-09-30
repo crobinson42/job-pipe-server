@@ -7,9 +7,14 @@ module.exports = function(app) {
   const { Schema } = mongooseClient
 
   const applicants = new Schema({
-    forms: [{ type: Schema.Types.ObjectId, ref: 'forms' }],
+    email: { type: String, required: true },
+    firstName: { type: String, required: true },
+    formValues: { type: Object, default: {} },
+    lastName: { type: String, required: true },
+    phone: { type: String, required: true },
+
+    form: { type: Schema.Types.ObjectId, ref: 'forms' },
     organization: { type: Schema.Types.ObjectId, ref: 'organizations' },
-    text: { type: String, required: true },
 
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
