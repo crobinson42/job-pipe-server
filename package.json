@@ -47,6 +47,7 @@
     "feathers-socketio": "^2.0.0",
     "helmet": "^3.8.1",
     "mongoose": "^4.11.9",
+    "objectid": "^3.2.1",
     "passport-facebook": "^2.1.1",
     "passport-google-oauth20": "^1.0.0",
     "serve-favicon": "^2.4.3",

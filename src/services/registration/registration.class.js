@@ -1,4 +1,5 @@
 const errors = require('feathers-errors')
+const ObjectId = require('objectid')
 
 /* eslint-disable no-unused-vars */
 class Service {
@@ -27,17 +28,26 @@ class Service {
     // }
 
     // validate both models before creating to eliminate the need to delete an org incase the user validate fails
-
     return new Promise((resolve, reject) => {
+      // we need to mock the organization prop on user for validation checks
       Promise.all([
         this.validateUser(data.user),
         this.validateOrganization(data.organization),
       ])
         .then(() => {
-          return Promise.all([
-            this.app.service('organizations').create(data.organization),
-            this.app.service('users').create(data.user),
-          ])
+          return this.app.service('organizations').create(data.organization)
+        })
+        .then(organization => {
+          // set user to admin
+          const userData = Object.assign({}, data.user, {
+            admin: true,
+            organization: organization._id,
+          })
+
+          return this.app
+            .service('users')
+            .create(userData)
+            .then(user => [organization, user])
         })
         .then(([organization, user]) => {
           // todo: auth user and send token
@@ -46,7 +56,7 @@ class Service {
           resolve({ authToken, organization, user })
         })
         .catch(err => {
-          return reject(new errors.BadRequest(err))
+          return reject(err)
         })
     })
   }
@@ -91,7 +101,7 @@ class Service {
             .then(({ data }) => {
               if (!data.length) return resolve()
 
-              return reject({
+              reject({
                 errors: {
                   email: {
                     message: 'Path `email` must be unique.',
@@ -105,9 +115,10 @@ class Service {
                     path: 'email',
                     $isValidatorError: true,
                   },
-                }
+                },
               })
             })
+            .catch(err => reject(err))
         })
     })
   }
