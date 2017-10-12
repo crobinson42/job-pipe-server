@@ -1,19 +1,17 @@
-const { authed, restrictToSameOrganization } = require('../../hooks')
+const { authed, addOrganizationParam, restrictToSameOrganization } = require('../../hooks')
 
 module.exports = {
   before: {
-    all: [
-      authed,
-      restrictToSameOrganization,
-    ],
-    find: [],
-    get: [],
+    all: [authed, addOrganizationParam],
+    find: [restrictToSameOrganization],
+    get: [restrictToSameOrganization],
     create: [],
-    update: [],
-    patch: [],
+    update: [restrictToSameOrganization],
+    patch: [restrictToSameOrganization],
     remove: [
       // todo: check if there are applicants before deleting?
-    ]
+      restrictToSameOrganization,
+    ],
   },
 
   after: {
@@ -23,7 +21,7 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: []
+    remove: [],
   },
 
   error: {
@@ -33,6 +31,6 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: []
-  }
-};
+    remove: [],
+  },
+}

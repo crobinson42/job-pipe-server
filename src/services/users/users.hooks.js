@@ -2,6 +2,7 @@ const commonHooks = require('feathers-hooks-common')
 const { hashPassword } = require('feathers-authentication-local').hooks
 const {
   authed,
+  addOrganizationParam,
   isAdmin,
   ownerOnly,
   restrictToSameOrganization,
@@ -11,8 +12,8 @@ module.exports = {
   before: {
     all: [authed],
     find: [
-      // todo: we need to open this up to check for unique email addresses for user creation
-      restrictToSameOrganization
+      restrictToSameOrganization,
+      addOrganizationParam,
     ],
     get: [restrictToSameOrganization],
     // Only admin can create a user or the 'registration' service

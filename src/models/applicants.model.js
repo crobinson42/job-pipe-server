@@ -7,8 +7,14 @@ module.exports = function(app) {
   const { Schema } = mongooseClient
 
   const applicants = new Schema({
+    archived: { type: Boolean, default: false },
     email: { type: String, required: true },
     firstName: { type: String, required: true },
+    flagged: { type: Boolean, default: false },
+    form: { type: Schema.Types.ObjectId, ref: 'forms' },
+    // formValues will be stored by key(label) => value in the
+    // event the form shape changes, the formValues still
+    // make sense when reviewing on the client
     formValues: { type: Object, default: {} },
     lastName: { type: String, required: true },
     // used by organization users only

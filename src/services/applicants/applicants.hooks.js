@@ -1,17 +1,18 @@
 // const commonHooks = require('feathers-hooks-common')
-const { authed } = require('../../hooks')
+const { authed, addOrganizationParam } = require('../../hooks')
 
 module.exports = {
   before: {
     all: [],
-    find: [authed],
+    find: [authed, addOrganizationParam],
     get: [],
     create: [],
-    update: [authed],
-    patch: [authed],
+    update: [authed, addOrganizationParam],
+    patch: [authed, addOrganizationParam],
     remove: [
       // todo: disallow?
       authed,
+      addOrganizationParam,
     ],
   },
 

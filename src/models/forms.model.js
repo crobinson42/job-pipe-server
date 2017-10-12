@@ -13,6 +13,7 @@ module.exports = function(app) {
     // the form-builder json shape that defines a forms elements on the frontend
     formShape: { type: Object, default: {}},
     title: { type: String, required: true },
+    version: { type: Number, default: new Date().getTime(), required: true },
 
     applicants: [{ type: Schema.Types.ObjectId, ref: 'applicants' }],
     organization: { type: Schema.Types.ObjectId, ref: 'organizations' },
