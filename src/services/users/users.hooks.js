@@ -12,10 +12,11 @@ module.exports = {
   before: {
     all: [authed],
     find: [
-      restrictToSameOrganization,
-      addOrganizationParam,
+      commonHooks.iff(commonHooks.isProvider('external'), addOrganizationParam),
     ],
-    get: [restrictToSameOrganization],
+    get: [
+      commonHooks.iff(commonHooks.isProvider('external'), addOrganizationParam),
+    ],
     // Only admin can create a user or the 'registration' service
     create: [
       commonHooks.iffElse(
